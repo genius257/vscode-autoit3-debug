@@ -1,4 +1,4 @@
-//import * as vscode from 'vscode';
+import * as vscode from 'vscode';
 import {
 	DebugSession, OutputEvent, TerminatedEvent,
 	/*InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent,
@@ -7,7 +7,7 @@ import {
 } from '@vscode/debugadapter';
 import { DebugProtocol as VSCodeDebugProtocol } from '@vscode/debugprotocol'
 import * as childProcess from 'child_process'
-import { Au3Runtime, FileAccessor } from './au3Runtime';
+import { /*Au3Runtime,*/ FileAccessor } from './au3Runtime';
 //import * as vscode from 'vscode';
 
 export interface LaunchRequestArguments extends VSCodeDebugProtocol.LaunchRequestArguments {
@@ -24,18 +24,23 @@ export class Au3DebugSession extends DebugSession {
     // a AutoIt3 runtime (or debugger)
     //private _runtime: Au3Runtime;
 
+    private process: childProcess.ChildProcessWithoutNullStreams | undefined;
+
     public constructor(fileAccessor: FileAccessor) {
         super();
 
         this.setDebuggerLinesStartAt1(true);
         this.setDebuggerColumnsStartAt1(true);
 
-        /*this._runtime =*/ new Au3Runtime(/*fileAccessor*/);
+        // this._runtime = new Au3Runtime(/*fileAccessor*/);
     }
 
     protected async launchRequest(response: VSCodeDebugProtocol.LaunchResponse, args: LaunchRequestArguments, request?: VSCodeDebugProtocol.Request): Promise<void> {
-        const process = childProcess.spawn(args.executable, [args.script], {stdio: "pipe"});
-        process.on('error', (err) => {
+        //vscode.debug.activeDebugConsole.append
+        vscode.commands.executeCommand('workbench.panel.repl.view.focus');
+        
+        this.process = childProcess.spawn(args.executable, [args.script], {stdio: "pipe"});
+        this.process.on('error', (err) => {
             response.success = false;
             response.message = err.message;
             response.body = err.stack;
@@ -43,7 +48,7 @@ export class Au3DebugSession extends DebugSession {
             this.sendEvent(new TerminatedEvent());
         });
 
-        process.on("exit", (code) => {
+        this.process.on("exit", (code) => {
             response.success = true;
             response.body = `Exit code: ${code}`;
             this.sendResponse(response);
@@ -51,7 +56,22 @@ export class Au3DebugSession extends DebugSession {
             this.sendEvent(new TerminatedEvent());
         });
 
-        process.stdout.on("data", (chunk: Buffer|string) => this.sendEvent(new OutputEvent(chunk.toString(), 'stdout')));
-        process.stderr.on("data", (chunk: Buffer|string) => this.sendEvent(new OutputEvent(chunk.toString(), 'stderr')));
+        this.process.stdout.on("data", (chunk: Buffer|string) => this.sendEvent(new OutputEvent(chunk.toString(), 'stdout')));
+        this.process.stderr.on("data", (chunk: Buffer|string) => this.sendEvent(new OutputEvent(chunk.toString(), 'stderr')));
+    }
+
+    protected initializeRequest(response: VSCodeDebugProtocol.InitializeResponse, args: VSCodeDebugProtocol.InitializeRequestArguments): void {
+        // build and return the capabilities of this debug adapter:
+        response.body = response.body || {};
+
+        response.body.supportsTerminateRequest = true;
+
+        this.sendResponse(response);
+    }
+
+    protected terminateRequest(response: VSCodeDebugProtocol.TerminateResponse, args: VSCodeDebugProtocol.TerminateArguments, request?: VSCodeDebugProtocol.Request | undefined): void {
+        this.process?.kill('SIGINT');
+        
+        super.terminateRequest(response, args, request);
     }
 }
