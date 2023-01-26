@@ -180,8 +180,6 @@ class Au3ConfigurationProvider implements vscode.DebugConfigurationProvider {
 			}
 		}
 
-		console.log(config);
-
 		if (!config.executable) {
 			return vscode.window.showInformationMessage("Cannot find a program to debug").then(_ => {
 				return undefined;	// abort launch
