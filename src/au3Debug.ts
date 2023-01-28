@@ -64,6 +64,7 @@ export class Au3DebugSession extends DebugSession {
         // build and return the capabilities of this debug adapter:
         response.body = response.body || {};
 
+        response.body.supportsRestartRequest = false;
         response.body.supportsTerminateRequest = true;
 
         this.sendResponse(response);
@@ -71,7 +72,6 @@ export class Au3DebugSession extends DebugSession {
 
     protected terminateRequest(response: VSCodeDebugProtocol.TerminateResponse, args: VSCodeDebugProtocol.TerminateArguments, request?: VSCodeDebugProtocol.Request | undefined): void {
         this.process?.kill('SIGINT');
-        
         super.terminateRequest(response, args, request);
     }
 }
