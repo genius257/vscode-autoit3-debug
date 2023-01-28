@@ -1,6 +1,6 @@
 {
     "name": "autoit3-debug",
-    "icon": "images/au3-debug-icon.png",
+    "icon": "images/logo.svg.png",
     "displayName": "AutoIt3 Debug",
     "description": "Autoit3 Debugger",
     "version": "1.0.0",
