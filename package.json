@@ -27,6 +27,17 @@
         "Debuggers"
     ],
     "contributes": {
+        "configuration": {
+            "title": "AutoIt",
+            "properties": {
+                "autoit3.installDir": {
+                    "scope": "window",
+                    "type": "string",
+                    "default": null,
+                    "description": "The path to a AutoIt3 installation directory."
+                }
+            }
+        },
         "debuggers": [
             {
                 "type": "au3",
