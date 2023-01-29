@@ -69,7 +69,7 @@ class DebugAdapterExecutableFactory implements vscode.DebugAdapterDescriptorFact
 		// param "executable" contains the executable optionally specified in the package.json (if any)
 
 		// use the executable specified in the package.json if it exists or determine it based on some other information (e.g. the session)
-		if (!executable) {
+		/*if (!executable) {
 			const command = "absolute path to my DA executable";
 			const args = [
 				"some args",
@@ -80,7 +80,7 @@ class DebugAdapterExecutableFactory implements vscode.DebugAdapterDescriptorFact
 				env: { "envVariable": "some value" }
 			};
 			executable = new vscode.DebugAdapterExecutable(command, args, options);
-		}
+		}*/
 
 		// make VS Code launch the DA executable
 		return executable;
