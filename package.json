@@ -48,12 +48,17 @@
                     "launch": {
                         "required": [
                             "script",
+                            "cwd",
                             "executable"
                         ],
                         "properties": {
                             "script": {
                                 "type": "string",
                                 "description": "Absolute path to the AutoIt3 script"
+                            },
+                            "cwd": {
+                                "type": "string",
+                                "description": "Absolute path to the working directory of the script being debugged."
                             },
                             "executable": {
                                 "type": "string",
@@ -69,6 +74,7 @@
                         "request": "launch",
                         "name": "Run AutoIt3 script",
                         "script": "${file}",
+                        "cwd": "${fileDirname}",
                         "executable": "${config:autoit3.installDir}/AutoIt3.exe"
                     }
                 ],
@@ -81,6 +87,7 @@
                             "request": "launch",
                             "name": "Run AutoIt3 script",
                             "script": "^\"\\${file}\"",
+                            "cwd": "\"\\${fileDirname}\"",
                             "executable": "^\"\\${config:autoit3.installDir}/AutoIt3.exe\""
                         }
                     }
