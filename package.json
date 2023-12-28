@@ -3,7 +3,7 @@
     "icon": "images/logo.svg.png",
     "displayName": "AutoIt3 Debug",
     "description": "Autoit3 Debugger",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "genius257",
     "repository": {
         "type": "git",
@@ -44,7 +44,9 @@
                 "label": "AutoIt3 debug",
                 "program": "./out/debugAdapter.js",
                 "runtime": "node",
-                "languages": ["au3"],
+                "languages": [
+                    "au3"
+                ],
                 "configurationAttributes": {
                     "launch": {
                         "required": [
