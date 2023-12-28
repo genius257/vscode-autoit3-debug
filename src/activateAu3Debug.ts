@@ -175,7 +175,8 @@ class Au3ConfigurationProvider implements vscode.DebugConfigurationProvider {
 				config.type = 'au3';
 				config.name = 'Launch';
 				config.request = 'launch';
-				config.executable = '${config:autoit3.installDir}/AutoIt3.exe ${file}"';
+				config.executable = '${config:autoit3.installDir}/AutoIt3.exe';
+				config.script = '${file}';
 				config.stopOnEntry = true;
 			}
 		}
