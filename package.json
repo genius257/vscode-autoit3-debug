@@ -67,6 +67,14 @@
                                 "type": "string",
                                 "description": "Absolute path to the AutoIt3 executable",
                                 "default": "${config:autoit3.installDir}/AutoIt3.exe"
+                            },
+                            "arguments": {
+                                "type": "array",
+                                "description": "Command line arguments passed to the script.",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "default": []
                             }
                         }
                     }
@@ -78,7 +86,8 @@
                         "name": "Run AutoIt3 script",
                         "script": "${file}",
                         "cwd": "${fileDirname}",
-                        "executable": "${config:autoit3.installDir}/AutoIt3.exe"
+                        "executable": "${config:autoit3.installDir}/AutoIt3.exe",
+                        "arguments": []
                     }
                 ],
                 "configurationSnippets": [
@@ -91,7 +100,8 @@
                             "name": "Run AutoIt3 script",
                             "script": "^\"\\${file}\"",
                             "cwd": "\"\\${fileDirname}\"",
-                            "executable": "^\"\\${config:autoit3.installDir}/AutoIt3.exe\""
+                            "executable": "^\"\\${config:autoit3.installDir}/AutoIt3.exe\"",
+                            "arguments": []
                         }
                     }
                 ]

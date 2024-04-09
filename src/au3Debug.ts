@@ -17,6 +17,8 @@ export interface LaunchRequestArguments extends VSCodeDebugProtocol.LaunchReques
     script: string;
     /** Absolute path to the working directory of the script */
     cwd: string;
+    /** Command line arguments passed to the script */
+    arguments: Array<string>;
 }
 
 export class Au3DebugSession extends DebugSession {
@@ -41,7 +43,7 @@ export class Au3DebugSession extends DebugSession {
         //vscode.debug.activeDebugConsole.append
         vscode.commands.executeCommand('workbench.panel.repl.view.focus');
         
-        this.process = childProcess.spawn(args.executable, [args.script], {stdio: "pipe", cwd: args.cwd});
+        this.process = childProcess.spawn(args.executable, [args.script, ...args.arguments], {stdio: "pipe", cwd: args.cwd});
         this.process.on('error', (err) => {
             response.success = false;
             response.message = err.message;
