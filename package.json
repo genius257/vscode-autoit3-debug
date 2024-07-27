@@ -3,7 +3,7 @@
     "icon": "images/logo.svg.png",
     "displayName": "AutoIt3 Debug",
     "description": "Autoit3 Debugger",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "publisher": "genius257",
     "repository": {
         "type": "git",
@@ -35,6 +35,43 @@
                     "type": "string",
                     "default": null,
                     "description": "The path to a AutoIt3 installation directory."
+                },
+                "autoit3.output.colors": {
+                    "scope": "window",
+                    "type": "object",
+                    "patternProperties": {
+                        "^.$": {
+                            "type": "string",
+                            "enum": [
+                                "black",
+                                "red",
+                                "green",
+                                "yellow",
+                                "blue",
+                                "magenta",
+                                "cyan",
+                                "white",
+                                "bright black",
+                                "bright red",
+                                "bright green",
+                                "bright yellow",
+                                "bright blue",
+                                "bright magenta",
+                                "bright cyan",
+                                "bright white",
+                                "orange"
+                            ]
+
+                        }
+                    },
+                    "default": {
+                        "!": "red",
+                        ">": "blue",
+                        "-": "orange",
+                        "+": "green"
+                    },
+                    "additionalProperties": false,
+                    "description": "debug output color rules based on leading character of a line"
                 }
             }
         },

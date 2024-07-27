@@ -28,6 +28,8 @@ export class Au3DebugSession extends DebugSession {
     // a AutoIt3 runtime (or debugger)
     //private _runtime: Au3Runtime;
 
+    private colorConfig: Record<string, string> | undefined;
+
     private process: childProcess.ChildProcessWithoutNullStreams | undefined;
 
     public constructor(fileAccessor: FileAccessor) {
@@ -36,14 +38,19 @@ export class Au3DebugSession extends DebugSession {
         this.setDebuggerLinesStartAt1(true);
         this.setDebuggerColumnsStartAt1(true);
 
-        // this._runtime = new Au3Runtime(/*fileAccessor*/);
+        const configurationInformation = vscode.workspace.getConfiguration('autoit3').inspect<typeof this.colorConfig>('output.colors');
+
+        this.colorConfig = configurationInformation?.workspaceValue || configurationInformation?.globalValue || configurationInformation?.defaultValue;
     }
 
     protected async launchRequest(response: VSCodeDebugProtocol.LaunchResponse, args: LaunchRequestArguments, request?: VSCodeDebugProtocol.Request): Promise<void> {
         //vscode.debug.activeDebugConsole.append
         vscode.commands.executeCommand('workbench.panel.repl.view.focus');
-        
+
         this.process = childProcess.spawn(args.executable, [args.script, ...args.arguments], {stdio: "pipe", cwd: args.cwd});
+
+        let outputBuffer = '';
+
         this.process.on('error', (err) => {
             response.success = false;
             response.message = err.message;
@@ -53,6 +60,10 @@ export class Au3DebugSession extends DebugSession {
         });
 
         this.process.on("exit", (code) => {
+            // Print remaning outputBuffer
+            if (outputBuffer.length > 0) {
+                this.writeLine(outputBuffer);
+            }
             response.success = true;
             response.body = `Exit code: ${code}`;
             this.sendResponse(response);
@@ -60,8 +71,20 @@ export class Au3DebugSession extends DebugSession {
             this.sendEvent(new TerminatedEvent());
         });
 
-        this.process.stdout.on("data", (chunk: Buffer|string) => this.sendEvent(new OutputEvent(chunk.toString(), 'stdout')));
-        this.process.stderr.on("data", (chunk: Buffer|string) => this.sendEvent(new OutputEvent(chunk.toString(), 'stderr')));
+        const onData = (chunk: Buffer|string) => {
+            outputBuffer += chunk.toString();
+            let newlineIndex;
+            while ((newlineIndex = outputBuffer.indexOf('\n')) >= 0) {
+                // Extract line
+                const line = outputBuffer.slice(0, newlineIndex + 1);
+                this.writeLine(line);
+                // Remove the line from the buffer
+                outputBuffer = outputBuffer.slice(newlineIndex + 1);
+            }
+        };
+
+        this.process.stdout.on("data", onData);
+        this.process.stderr.on("data", onData);
     }
 
     protected initializeRequest(response: VSCodeDebugProtocol.InitializeResponse, args: VSCodeDebugProtocol.InitializeRequestArguments): void {
@@ -77,5 +100,78 @@ export class Au3DebugSession extends DebugSession {
     protected terminateRequest(response: VSCodeDebugProtocol.TerminateResponse, args: VSCodeDebugProtocol.TerminateArguments, request?: VSCodeDebugProtocol.Request | undefined): void {
         this.process?.kill('SIGINT');
         super.terminateRequest(response, args, request);
+    }
+
+    protected writeLine(line: string): void
+    {
+        const lineColor = this.colorConfig?.[line[0]];
+
+        if (lineColor !== undefined) {
+            line = this.wrapLineInColor(line, lineColor);
+        }
+
+        this.sendEvent(new OutputEvent(line));
+    }
+
+    protected wrapLineInColor(line: string, color: string): string
+    {
+        switch (color) {
+            case 'black':
+                line = '\x1b[30m'+line+'\x1b[0m';
+                break;
+            case 'red':
+                line = '\x1b[31m'+line+'\x1b[0m';
+                break;
+            case 'green':
+                line = '\x1b[32m'+line+'\x1b[0m';
+                break;
+            case 'yellow':
+                line = '\x1b[33m'+line+'\x1b[0m';
+                break;
+            case 'blue':
+                line = '\x1b[34m'+line+'\x1b[0m';
+                break;
+            case 'magenta':
+                line = '\x1b[35m'+line+'\x1b[0m';
+                break;
+            case 'cyan':
+                line = '\x1b[36m'+line+'\x1b[0m';
+                break;
+            case 'white':
+                line = '\x1b[37m'+line+'\x1b[0m';
+                break;
+            case 'orange':
+                line = '\x1b[38m'+line+'\x1b[0m';
+                break;
+            case 'bright black':
+                line = '\x1b[90m'+line+'\x1b[0m';
+                break;
+            case 'bright red':
+                line = '\x1b[91m'+line+'\x1b[0m';
+                break;
+            case 'bright green':
+                line = '\x1b[92m'+line+'\x1b[0m';
+                break;
+            case 'bright yellow':
+                line = '\x1b[93m'+line+'\x1b[0m';
+                break;
+            case 'bright blue':
+                line = '\x1b[94m'+line+'\x1b[0m';
+                break;
+            case 'bright magenta':
+                line = '\x1b[95m'+line+'\x1b[0m';
+                break;
+            case 'bright cyan':
+                line = '\x1b[96m'+line+'\x1b[0m';
+                break;
+            case 'bright white':
+                line = '\x1b[97m'+line+'\x1b[0m';
+                break;
+            default:
+                vscode.window.showWarningMessage(`Unknown color: ${color}`);
+                break;
+        }
+
+        return line;
     }
 }
