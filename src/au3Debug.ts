@@ -48,6 +48,8 @@ export class Au3DebugSession extends DebugSession {
         vscode.commands.executeCommand('workbench.panel.repl.view.focus');
 
         this.process = childProcess.spawn(args.executable, [args.script, ...args.arguments], {stdio: "pipe", cwd: args.cwd});
+        this.process.stdout.setEncoding('binary');
+        this.process.stderr.setEncoding('binary');
 
         let outputBuffer = '';
 
