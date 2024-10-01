@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2024-10-01
+
+### Fixed
+
+- Output to debug console was wrong for some chars, when comparing to known SciTE console output
+
 ## [1.2.0] - 2024-07-27
 
 ### Added
