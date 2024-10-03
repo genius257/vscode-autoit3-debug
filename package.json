@@ -3,7 +3,7 @@
     "icon": "images/logo.svg.png",
     "displayName": "AutoIt3 Debug",
     "description": "Autoit3 Debugger",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "publisher": "genius257",
     "repository": {
         "type": "git",
@@ -61,7 +61,6 @@
                                 "bright white",
                                 "orange"
                             ]
-
                         }
                     },
                     "default": {
