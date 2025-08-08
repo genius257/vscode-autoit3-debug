@@ -33,7 +33,7 @@
                 "autoit3.installDir": {
                     "scope": "window",
                     "type": "string",
-                    "default": null,
+                    "default": "C:\\Program Files (x86)\\AutoIt3",
                     "description": "The path to a AutoIt3 installation directory."
                 },
                 "autoit3.output.colors": {
