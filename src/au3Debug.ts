@@ -18,7 +18,7 @@ export interface LaunchRequestArguments extends VSCodeDebugProtocol.LaunchReques
     /** Absolute path to the working directory of the script */
     cwd: string;
     /** Command line arguments passed to the script */
-    arguments: Array<string>;
+    arguments?: Array<string>;
     /** Redirects fatal error information to the debug console instead of a message box */
     errorStdOut: boolean;
 }
@@ -55,7 +55,7 @@ export class Au3DebugSession extends DebugSession {
             executableFlags.push('/ErrorStdOut');
         }
 
-        this.process = childProcess.spawn(args.executable, [...executableFlags, args.script, ...args.arguments], {stdio: "pipe", cwd: args.cwd});
+        this.process = childProcess.spawn(args.executable, [...executableFlags, args.script, ...(args?.arguments??[])], {stdio: "pipe", cwd: args.cwd});
         this.process.stdout.setEncoding('binary');
         this.process.stderr.setEncoding('binary');
 
