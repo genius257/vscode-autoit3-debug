@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for running AutoIt with the ErrorStdOut argument via the launch configuration file.
 
+## Fixed
+
+- Default autoit3 instsallDir configuration value was null, instead of assuming default AutoIt install path
+
 ## [1.2.1] - 2024-10-01
 
 ### Fixed
