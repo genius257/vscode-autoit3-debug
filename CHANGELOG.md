@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+
+- Support for running AutoIt with the ErrorStdOut argument via the launch configuration file.
+
 ## [1.2.1] - 2024-10-01
 
 ### Fixed
@@ -36,3 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Running AutoIt3 scripts via vscode run and debug system with output.
+
+[Unreleased]: https://github.com/genius257/vscode-autoit3-debug/compare/1.8.6...HEAD
+[1.2.1]: https://github.com/genius257/vscode-autoit3-debug/compare/1.2.0...1.2.1
+[1.2.0]: https://github.com/genius257/vscode-autoit3-debug/compare/1.1.0...1.2.0
+[1.1.0]: https://github.com/genius257/vscode-autoit3-debug/compare/1.0.1...1.1.0
+[1.0.1]: https://github.com/genius257/vscode-autoit3-debug/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/genius257/vscode-autoit3-debug/releases/tag/1.0.0
