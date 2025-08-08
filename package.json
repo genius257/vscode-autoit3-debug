@@ -104,6 +104,11 @@
                                 "description": "Absolute path to the AutoIt3 executable",
                                 "default": "${config:autoit3.installDir}/AutoIt3.exe"
                             },
+                            "errorStdOut": {
+                                "type": "boolean",
+                                "description": "Redirects fatal error information to the debug console instead of a message box",
+                                "default": false
+                            },
                             "arguments": {
                                 "type": "array",
                                 "description": "Command line arguments passed to the script.",

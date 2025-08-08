@@ -19,6 +19,8 @@ export interface LaunchRequestArguments extends VSCodeDebugProtocol.LaunchReques
     cwd: string;
     /** Command line arguments passed to the script */
     arguments: Array<string>;
+    /** Redirects fatal error information to the debug console instead of a message box */
+    errorStdOut: boolean;
 }
 
 export class Au3DebugSession extends DebugSession {
@@ -47,7 +49,13 @@ export class Au3DebugSession extends DebugSession {
         //vscode.debug.activeDebugConsole.append
         vscode.commands.executeCommand('workbench.panel.repl.view.focus');
 
-        this.process = childProcess.spawn(args.executable, [args.script, ...args.arguments], {stdio: "pipe", cwd: args.cwd});
+        const executableFlags: string[] = [];
+
+        if (args.errorStdOut) {
+            executableFlags.push('/ErrorStdOut');
+        }
+
+        this.process = childProcess.spawn(args.executable, [...executableFlags, args.script, ...args.arguments], {stdio: "pipe", cwd: args.cwd});
         this.process.stdout.setEncoding('binary');
         this.process.stderr.setEncoding('binary');
 
