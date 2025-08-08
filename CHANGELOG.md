@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 - Default autoit3 instsallDir configuration value was null, instead of assuming default AutoIt install path
+- Configs missing the arguement property in the launch configuration file, resulted in debug session hanging caused by error thrown.
 
 ## [1.2.1] - 2024-10-01
 
