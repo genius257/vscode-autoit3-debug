@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Default autoit3 instsallDir configuration value was null, instead of assuming default AutoIt install path
 - Configs missing the arguement property in the launch configuration file, resulted in debug session hanging caused by error thrown.
+- Script working directory would be vscode executable folder location, if cwd property was omitted from the launch configuration file. (#14)
 
 ## [1.2.1] - 2024-10-01
 
