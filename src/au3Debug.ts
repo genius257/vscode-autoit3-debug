@@ -7,6 +7,7 @@ import {
 } from '@vscode/debugadapter';
 import { DebugProtocol as VSCodeDebugProtocol } from '@vscode/debugprotocol'
 import * as childProcess from 'child_process'
+import { dirname } from 'path';
 import { /*Au3Runtime,*/ FileAccessor } from './au3Runtime';
 //import * as vscode from 'vscode';
 
@@ -16,7 +17,7 @@ export interface LaunchRequestArguments extends VSCodeDebugProtocol.LaunchReques
     /** Full path to the AutoIt3 script */
     script: string;
     /** Absolute path to the working directory of the script */
-    cwd: string;
+    cwd?: string;
     /** Command line arguments passed to the script */
     arguments?: Array<string>;
     /** Redirects fatal error information to the debug console instead of a message box */
@@ -55,7 +56,7 @@ export class Au3DebugSession extends DebugSession {
             executableFlags.push('/ErrorStdOut');
         }
 
-        this.process = childProcess.spawn(args.executable, [...executableFlags, args.script, ...(args?.arguments??[])], {stdio: "pipe", cwd: args.cwd});
+        this.process = childProcess.spawn(args.executable, [...executableFlags, args.script, ...(args?.arguments??[]), ], {stdio: "pipe", cwd: args.cwd ?? dirname(args.script)});
         this.process.stdout.setEncoding('binary');
         this.process.stderr.setEncoding('binary');
 
